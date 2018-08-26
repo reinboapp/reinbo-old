@@ -1,6 +1,9 @@
 export default {
   Query: {
-    welcome: (_, { yourNickname }) => `Welcome, ${yourNickname || "here"}!`,
+    welcome: (_, { yourNickname }, ctx) => {
+      console.log(ctx.user);
+      return `Welcome, ${yourNickname || "here"}!`;
+    },
     checkOdd: (_, { number }) => {
       if (!number) {
         return new Error("not odd number");

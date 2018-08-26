@@ -21,8 +21,7 @@ export default {
         };
       } catch (e) {
         // database error
-        console.log(e.message);
-        return new Error("Database error");
+        return new Error("Database error: " + e.message);
       }
     },
     userLogin: async (_, { input }) => {
@@ -47,7 +46,7 @@ export default {
         };
       } catch (e) {
         // database error
-        return new Error("Database error");
+        return new Error("Database error: " + e.message);
       }
     }
   }
