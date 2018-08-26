@@ -1,19 +1,21 @@
 type UserReturn {
-  _id: String
-  username: String
-  fullname: String
-}
-
-type CreateUserReturn {
   id: ID
   username: Username
   success: Boolean
+  token: String
+}
+
+input RegisterInput {
+  username: Username!
+  password: Password!
+  email: Email!
+}
+input LoginInput {
+  username: Username!
+  password: Password!
 }
 
 type Mutation {
-  createUser(
-    username: Username!
-    password: Password!
-    email: Email!
-  ): CreateUserReturn
+  userRegister(input: RegisterInput!): UserReturn
+  userLogin(input: LoginInput): UserReturn
 }

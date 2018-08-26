@@ -2,6 +2,7 @@ require("dotenv").config();
 import mongoose from "mongoose";
 // import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true },
@@ -9,15 +10,19 @@ const userSchema = new mongoose.Schema({
   password: { type: String }
 });
 
-userSchema.pre("save", async next => {
+// not using () => because "this"
+
+userSchema.pre("save", async function(next) {
   const user = this;
   // only hash the password if it has been modified (or is new)
   if (!user.isModified("password")) return next();
 
   // generate a salt
-  const SALT_WORK_FACTOR = process.env.PASSWORD_SALT_FACTOR;
+  const SALT_WORK_FACTOR = parseInt(process.env.PASSWORD_SALT_FACTOR);
+
   try {
-    const passwordHash = await bcrypt.hash(user.password, SALT_WORK_FACTOR);
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
+    const passwordHash = await bcrypt.hash(user.password, salt);
     user.password = passwordHash;
     next();
   } catch (e) {
@@ -25,10 +30,17 @@ userSchema.pre("save", async next => {
   }
 });
 
-userSchema.methods.comparePassword = async candidatePassword => {
+userSchema.methods.comparePassword = async function(candidatePassword) {
   const user = this;
-  const match = bcrypt.compare(candidatePassword, user.password);
+  const match = await bcrypt.compare(candidatePassword, user.password);
   return match;
+};
+
+userSchema.methods.getToken = async function() {
+  const user = this;
+  const { username, _id } = user;
+  const token = jwt.sign({ id: _id, username }, process.env.JWT_SECRET);
+  return token;
 };
 
 export default mongoose.model("User", userSchema);
