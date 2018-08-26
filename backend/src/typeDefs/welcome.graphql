@@ -1,0 +1,10 @@
+type UsernameResult {
+  success: Boolean
+  username: String
+}
+
+type Query {
+  welcome(yourNickname: String): String!
+  checkOdd(number: Odd): Boolean!
+  checkUsername(username: Username): UsernameResult
+}

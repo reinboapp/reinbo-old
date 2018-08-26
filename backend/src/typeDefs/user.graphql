@@ -1,0 +1,19 @@
+type UserReturn {
+  _id: String
+  username: String
+  fullname: String
+}
+
+type CreateUserReturn {
+  id: ID
+  username: Username
+  success: Boolean
+}
+
+type Mutation {
+  createUser(
+    username: Username!
+    password: Password!
+    email: Email!
+  ): CreateUserReturn
+}
