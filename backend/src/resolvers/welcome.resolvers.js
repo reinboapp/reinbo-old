@@ -1,7 +1,6 @@
 export default {
   Query: {
     welcome: (_, { yourNickname }, ctx) => {
-      console.log(ctx.user);
       return `Welcome, ${yourNickname || "here"}!`;
     },
     checkOdd: (_, { number }) => {

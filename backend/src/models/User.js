@@ -1,17 +1,17 @@
 require("dotenv").config();
 import mongoose from "mongoose";
+
 // import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true },
-  email: { type: String, unique: true },
-  password: { type: String }
+  email: { type: String, required: true, unique: true },
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 });
 
 // not using () => because "this"
-
 userSchema.pre("save", async function(next) {
   const user = this;
   // only hash the password if it has been modified (or is new)
