@@ -5,3 +5,8 @@ export const chatEmitter = new ChatEmitter();
 
 class NotifEmitter extends EventEmitter {}
 export const notifEmitter = new NotifEmitter();
+
+export default {
+  chatEmitter,
+  notifEmitter
+};

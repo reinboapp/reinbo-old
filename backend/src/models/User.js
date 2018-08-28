@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("now-env");
 import mongoose from "mongoose";
 
 // import isEmail from "validator/lib/isEmail";

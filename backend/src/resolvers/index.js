@@ -2,6 +2,7 @@ import { mergeResolvers } from "merge-graphql-schemas";
 
 import welcomeResolvers from "./welcome.resolvers";
 import userResolvers from "./user.resolvers";
+import chatResolvers from "./chat.resolvers";
 
 import oddScalar from "./customScalars/odd.scalar";
 import usernameScalar from "./customScalars/username.scalar";
@@ -16,7 +17,8 @@ const resolversArray = [
   emailScalar,
   // resolvers
   welcomeResolvers,
-  userResolvers
+  userResolvers,
+  chatResolvers
 ];
 
 const resolvers = mergeResolvers(resolversArray);

@@ -1,8 +1,16 @@
-require("dotenv").config();
+require("now-env");
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 
-import { chatEmitter } from "../eventEmitter";
+export const decode = async token => {
+  const decodedJwt = jwt.verify(token, process.env.JWT_SECRET);
+  if (decodedJwt.id) {
+    const userId = decodedJwt.id;
+    const foundUser = await User.findById(userId);
+    return foundUser;
+  }
+  return {};
+};
 
 // headers authorization Bearer: asfdasdfasdfasdf
 // if valid , will assign req.user
@@ -16,13 +24,7 @@ export default async (req, res, next) => {
       req.headers.authorization.split(" ")[0] === "Bearer"
     ) {
       const token = req.headers.authorization.split(" ")[1];
-      const decodedJwt = jwt.verify(token, process.env.JWT_SECRET);
-      if (decodedJwt.id) {
-        const userId = decodedJwt.id;
-        chatEmitter.emit("event", userId);
-        const foundUser = await User.findById(userId);
-        req.user = foundUser;
-      }
+      req.user = await decode(token);
     }
     next();
   } catch (e) {

@@ -1,0 +1,9 @@
+{
+  "env": {
+    "ENV": "@env",
+    "PORT": "@port",
+    "MONGO_URI": "@mongo-uri",
+    "PASSWORD_SALT_FACTOR": "@password-salt-factor",
+    "JWT_SECRET": "@jwt-secret"
+  }
+}

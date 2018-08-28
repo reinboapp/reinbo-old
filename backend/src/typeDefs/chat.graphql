@@ -1,0 +1,16 @@
+type ChatReturn {
+  userId: ID
+  text: String
+}
+
+input ChatInput {
+  text: String
+}
+
+type Mutation {
+  chatSend(input: ChatInput!): ChatReturn!
+}
+
+type Subscription {
+  chatGet: ChatReturn!
+}

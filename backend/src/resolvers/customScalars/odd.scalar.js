@@ -5,6 +5,6 @@ export default scalarResolvers({
   validator: value => {
     return value % 2 === 1;
   },
-  type: "INT",
-  description: "Odd number"
+  description: "Odd number",
+  type: "INT"
 });
