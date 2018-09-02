@@ -1,0 +1,24 @@
+type UserReturn {
+  id: ID
+  username: Username
+  name: String
+  success: Boolean
+  token: String
+}
+
+input RegisterInput {
+  username: Username!
+  fullname: String!
+  password: Password!
+  email: Email!
+}
+
+input LoginInput {
+  username: Username!
+  password: Password!
+}
+
+type Mutation {
+  userRegister(input: RegisterInput!): UserReturn
+  userLogin(input: LoginInput): UserReturn
+}

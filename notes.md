@@ -1,13 +1,19 @@
-# Gacha
+# Conversation
 
--
+- has many topics
+- - #general for default
+- - #secret for dissapearing messages
+- 1 on 1 conversation, has friend request feature
+- audio call, video call, screenshare
+- Bot
 
-# Anonymous
+# Chat
 
-- anonymous letter
-- anonymous comment
-- no anonymous post
+- secure, encrypted
+- attach, files
 
-# Circle
+# Story
 
-group of people that have same
+- equal post in facebook, twit in twitter
+- mode scroll and mode story
+- only for friend

@@ -1,0 +1,9 @@
+scalar Upload
+
+# user
+scalar Username
+scalar Password
+scalar Email
+
+# conversation
+scalar Channel

@@ -1,0 +1,36 @@
+type ConversationReturn {
+  id: ID
+  conversationId: String!
+  from: ID
+  publicKey: String!
+  channels: [Channel]
+  members: [UserReturn]
+  name: String
+}
+
+enum ConversationActivityType {
+  JOIN
+  LEAVE
+}
+
+input ConversationActivityInput {
+  conversationId: String!
+}
+
+input ConversationMutationInput {
+  conversationId: String!
+  name: String
+  description: String
+  channels: [Channel]
+}
+
+type Mutation {
+  conversationActivity(
+    input: ConversationActivityInput!
+    type: ConversationActivityType!
+  ): ConversationReturn!
+  conversationMutation(
+    input: ConversationMutationInput!
+    type: MutationType
+  ): ConversationReturn!
+}

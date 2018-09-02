@@ -1,0 +1,53 @@
+enum MessageType {
+  TEXT_ONLY
+  WITH_MEDIA
+  SAY_HI
+  FRIEND_REQUEST
+}
+
+enum MessageQueryType {
+  GET_CONVERSATION
+  SEARCH
+}
+
+type MessageReturn {
+  from: ID!
+  conversationId: ID!
+  content: String
+  embed: String
+  image: String
+  audio: String
+  video: String
+  type: MediaType
+  edited: Boolean
+  editedContent: String
+}
+
+input MessageMutationInput {
+  content: String
+  media: String
+  type: MessageType!
+}
+
+input MessageQueryInput {
+  conversationId: ID!
+  search: String
+}
+
+type Query {
+  messageQuery(
+    input: MessageQueryInput!
+    type: MessageQueryType!
+  ): [MessageReturn]
+}
+
+type Mutation {
+  messageMutation(
+    input: MessageMutationInput!
+    type: MutationType!
+  ): MessageReturn!
+}
+
+type Subscription {
+  messageSubscription: MessageReturn!
+}
