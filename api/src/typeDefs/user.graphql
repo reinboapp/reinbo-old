@@ -1,24 +1,28 @@
-type UserReturn {
+type AuthReturn {
   id: ID
   username: Username
-  name: String
+  fullname: String
   success: Boolean
-  token: String
+  accessToken: String
+  refreshToken: String
 }
-
 input RegisterInput {
   username: Username!
   fullname: String!
   password: Password!
   email: Email!
 }
-
 input LoginInput {
   username: Username!
   password: Password!
 }
+input TokenInput {
+  refreshToken: String
+}
 
 type Mutation {
-  userRegister(input: RegisterInput!): UserReturn
-  userLogin(input: LoginInput): UserReturn
+  userRegister(input: RegisterInput!): AuthReturn
+  userLogin(input: LoginInput!): AuthReturn
+  userRefreshToken(input: TokenInput!): AuthReturn
+  userRevokeToken(input: TokenInput!): Boolean
 }

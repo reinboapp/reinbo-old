@@ -11,6 +11,7 @@ enum MessageQueryType {
 }
 
 type MessageReturn {
+  id: ID
   from: ID!
   conversationId: ID!
   content: String
@@ -18,7 +19,8 @@ type MessageReturn {
   image: String
   audio: String
   video: String
-  type: MediaType
+  type: MessageType
+  mediaType: MediaType
   edited: Boolean
   editedContent: String
 }

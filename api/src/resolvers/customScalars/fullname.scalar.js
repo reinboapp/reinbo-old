@@ -1,7 +1,7 @@
 import scalarResolvers from "./_scalarResolvers";
 
 export default scalarResolvers({
-  name: "Username",
+  name: "Fullname",
   validator: value => {
     return value.trim().length > 4;
   },

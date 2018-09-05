@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../../models/User";
 
 export const decode = async token => {
-  const decodedJwt = jwt.verify(token, process.env.JWT_SECRET);
+  const decodedJwt = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
   if (decodedJwt._id) {
     const userId = decodedJwt._id;
     const foundUser = await User.findById(userId);

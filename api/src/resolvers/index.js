@@ -1,7 +1,8 @@
 import { mergeResolvers } from "merge-graphql-schemas";
 
-import userResolvers from "./user.resolvers";
+import conversationResolvers from "./conversation.resolvers";
 import messageResolvers from "./message.resolvers";
+import userResolvers from "./user.resolvers";
 
 import usernameScalar from "./customScalars/username.scalar";
 import passwordScalar from "./customScalars/password.scalar";
@@ -15,8 +16,9 @@ const resolversArray = [
   passwordScalar,
   emailScalar,
   // resolvers
-  userResolvers,
-  messageResolvers
+  conversationResolvers,
+  messageResolvers,
+  userResolvers
 ];
 
 const resolvers = mergeResolvers(resolversArray);

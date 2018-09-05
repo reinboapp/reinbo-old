@@ -1,7 +1,10 @@
 import { CREATE, UPDATE, DELETE } from "../constants";
 import messageCreate from "./mutation/messageCreate";
 
-export default async (_, args, ctx) => {
+/**
+ * message mutation: CREATE: mutation/messageCreate
+ */
+const messageMutation = async (_, args, ctx) => {
   switch (args.type) {
     case CREATE:
       return await messageCreate(_, args, ctx);
@@ -9,6 +12,7 @@ export default async (_, args, ctx) => {
     case DELETE:
       return {};
   }
-  const returnData = {};
-  return returnData;
+  return {};
 };
+
+export default messageMutation;

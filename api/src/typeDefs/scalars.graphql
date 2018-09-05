@@ -3,6 +3,7 @@ scalar Upload
 # user
 scalar Username
 scalar Password
+scalar Fullname
 scalar Email
 
 # conversation

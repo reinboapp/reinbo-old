@@ -1,23 +1,52 @@
-export default async (_, { input }, { models }) => {
+import { REDIS_PREFIX_REFRESH_TOKEN } from "../constants";
+
+export default async (
+  _,
+  { input: { username, password, email, fullname } },
+  { models, userAgent, redisClient }
+) => {
   const { User } = models;
-  // validate
-  const { username, password, email } = input;
+  console.log(fullname);
+  /**validate data */
   if (!username) return new Error("username not valid");
   if (!password) return new Error("password not valid");
+  if (!fullname) return new Error("fullname not valid");
   if (!email) return new Error("email not valid");
 
-  // save to database
-  const newUser = new User({ username, password, email });
+  /** save to database */
+  const newUser = new User({ username, fullname, password, email });
+  let newUserData = newUser;
   try {
-    const newUserData = await newUser.save();
-    // response
-    return {
-      id: newUserData._id,
-      username,
-      success: true
-    };
+    newUserData = await newUser.save();
   } catch (e) {
-    // database error
-    return new Error("Database error: " + e.message);
+    return new Error(e);
   }
+
+  /**generate accessToken and refreshToken */
+  const accessToken = await newUser.generateAccessToken();
+  const refreshToken = await newUser.generateRefreshToken({
+    id: newUserData._id,
+    ua: userAgent
+  });
+
+  /**save refreshToken to redis
+   * with expired 7d = 86400 * 7
+   */
+  redisClient.set(
+    `${REDIS_PREFIX_REFRESH_TOKEN}:${newUserData._id}:${refreshToken}`,
+    1,
+    "EX",
+    604800
+  );
+
+  /** return */
+  return {
+    id: newUserData._id,
+    username: newUserData.username,
+    fullname: newUserData.fullname,
+    description: newUserData.description,
+    success: true,
+    accessToken,
+    refreshToken
+  };
 };

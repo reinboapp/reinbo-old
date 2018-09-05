@@ -3,7 +3,9 @@
     "ENV": "@env",
     "PORT": "@port",
     "MONGO_URI": "@mongo-uri",
+    "REDIS_URI": "@redis-uri",
     "PASSWORD_SALT_FACTOR": "@password-salt-factor",
-    "JWT_SECRET": "@jwt-secret"
+    "JWT_ACCESS_TOKEN_SECRET": "@jwt-access-token-secret",
+    "JWT_REFRESH_TOKEN_SECRET": "@jwt-refresh-token-secret"
   }
 }

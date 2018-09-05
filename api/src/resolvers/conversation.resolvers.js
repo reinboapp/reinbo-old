@@ -1,8 +1,10 @@
 import conversationMutation from "./conversation/conversationMutation";
 
-export default {
+const conversationResolvers = {
   Mutation: {
     conversationMutation
   },
   Subscription: {}
 };
+
+export default conversationResolvers;

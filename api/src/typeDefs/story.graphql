@@ -1,0 +1,3 @@
+type Story {
+  name: String
+}
