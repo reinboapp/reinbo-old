@@ -5,12 +5,18 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  username: { type: String, required: true, unique: true },
-  fullname: { type: String, required: true },
-  password: { type: String, required: true }
-});
+const userSchema = new mongoose.Schema(
+  {
+    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    fullname: { type: String, required: true },
+    password: { type: String, required: true },
+    bio: { type: String }
+  },
+  {
+    timestamps: true
+  }
+);
 
 /**before save, encrypt password */
 userSchema.pre("save", async function(next) {

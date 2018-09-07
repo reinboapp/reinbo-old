@@ -10,3 +10,8 @@ enum MediaType {
   AUDIO
   VIDEO
 }
+
+enum QueryType {
+  GETONE
+  SEARCH
+}

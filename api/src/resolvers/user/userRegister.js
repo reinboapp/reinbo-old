@@ -6,7 +6,6 @@ export default async (
   { models, userAgent, redisClient }
 ) => {
   const { User } = models;
-  console.log(fullname);
   /**validate data */
   if (!username) return new Error("username not valid");
   if (!password) return new Error("password not valid");
@@ -44,7 +43,7 @@ export default async (
     id: newUserData._id,
     username: newUserData.username,
     fullname: newUserData.fullname,
-    description: newUserData.description,
+    bio: newUserData.bio,
     success: true,
     accessToken,
     refreshToken

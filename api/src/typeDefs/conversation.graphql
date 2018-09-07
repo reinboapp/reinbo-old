@@ -1,3 +1,7 @@
+type Channel {
+  name: String
+  members: [UserReturn]
+}
 type ConversationUserReturn {
   id: ID
   username: Username
@@ -12,6 +16,9 @@ type ConversationReturn {
   publicKey: String!
 }
 
+"""
+
+"""
 enum ConversationActivityType {
   JOIN
   LEAVE
@@ -25,7 +32,7 @@ input ConversationMutationInput {
   conversationId: Username!
   name: Fullname
   description: Fullname
-  channels: [Channel]
+  # channels: [Channel]
 }
 
 type Mutation {

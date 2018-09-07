@@ -1,11 +1,13 @@
+require("now-env");
 import mongoose from "mongoose";
+import AES from "crypto-js/aes";
 
 const {
   Schema: {
     Types: { ObjectId }
   }
 } = mongoose;
-const chatSchema = new mongoose.Schema(
+const messageSchema = new mongoose.Schema(
   {
     from: { type: ObjectId, required: true },
     conversationId: { type: ObjectId, required: true, index: true },
@@ -23,4 +25,16 @@ const chatSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Chat", chatSchema);
+/**encrypt message with key from conversation */
+messageSchema.methods.encryptMessage = async function(conversationKey) {
+  const message = this;
+  return AES.encrypt(message.content, conversationKey);
+};
+
+/**decrypt message with key from conversation */
+messageSchema.methods.decryptMessage = async function(conversationKey) {
+  const message = this;
+  return AES.decrypt(message.content, conversationKey);
+};
+
+export default mongoose.model("Message", messageSchema);

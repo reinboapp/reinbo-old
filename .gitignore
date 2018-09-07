@@ -1,6 +1,7 @@
 node_modules/
 
 now-secrets.json
+SECRET
 
 package-lock.json
 config.json

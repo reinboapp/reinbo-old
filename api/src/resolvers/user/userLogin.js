@@ -1,23 +1,40 @@
-export default async (_, { input }, { models }) => {
+export default async (_, { input }, { models, userAgent }) => {
   const { User } = models;
   // validate
-  const { username, password } = input;
-  if (!username) return new Error("username not valid");
+  const { username, password, email } = input;
+  if (!username && !email)
+    return new Error("please provide valid email or username");
   if (!password) return new Error("password not valid");
 
   // check in database
   try {
-    const foundUser = await User.findOne({ username });
-    if (!foundUser) return new Error("username not found");
+    const query = {};
+    if (email) {
+      query.email = email;
+    }
+    if (username) {
+      query.username = username;
+    }
+
+    const foundUser = await User.findOne(query);
+    if (!foundUser) return new Error("user not found");
 
     const passwordMatch = await foundUser.comparePassword(password);
     if (!passwordMatch) return new Error("password wrong");
 
+    const accessToken = await foundUser.generateAccessToken();
+    const refreshToken = await foundUser.generateRefreshToken({
+      id: foundUser._id,
+      ua: userAgent
+    });
     return {
       id: foundUser._id,
-      username,
       success: true,
-      token: foundUser.getToken()
+      username: foundUser.username,
+      fullname: foundUser.fullname,
+      email: foundUser.email,
+      accessToken,
+      refreshToken
     };
   } catch (e) {
     // database error

@@ -6,6 +6,7 @@
     "REDIS_URI": "@redis-uri",
     "PASSWORD_SALT_FACTOR": "@password-salt-factor",
     "JWT_ACCESS_TOKEN_SECRET": "@jwt-access-token-secret",
-    "JWT_REFRESH_TOKEN_SECRET": "@jwt-refresh-token-secret"
+    "JWT_REFRESH_TOKEN_SECRET": "@jwt-refresh-token-secret",
+    "MESSAGE_SECRET": "@message-secret"
   }
 }

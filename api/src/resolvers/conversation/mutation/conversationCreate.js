@@ -1,4 +1,3 @@
-import AES from "crypto-js/aes";
 import { PUBLIC, GROUP } from "../../constants";
 /**
  * create GROUP conversation by default
@@ -31,7 +30,7 @@ const conversationCreate = async (
     privacyType,
     sizeType
   });
-  console.log(newConversation);
+  // console.log(newConversation);
 
   return newConversation;
 };

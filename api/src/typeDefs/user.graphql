@@ -1,28 +1,64 @@
+"""
+
+"""
+type UserReturn {
+  id: ID
+  username: Username
+  fullname: String
+  bio: String
+  createdAt: Date
+  updatedAt: Date
+}
 type AuthReturn {
   id: ID
   username: Username
   fullname: String
+  email: Email
   success: Boolean
   accessToken: String
   refreshToken: String
 }
-input RegisterInput {
+
+input UserInput {
   username: Username!
   fullname: String!
   password: Password!
   email: Email!
+  bio: String
 }
+"""
+Login with email or password or both!
+"""
 input LoginInput {
-  username: Username!
+  email: Email
+  username: Username
   password: Password!
 }
+"""
+for refresh token
+"""
 input TokenInput {
   refreshToken: String
 }
 
 type Mutation {
-  userRegister(input: RegisterInput!): AuthReturn
-  userLogin(input: LoginInput!): AuthReturn
-  userRefreshToken(input: TokenInput!): AuthReturn
-  userRevokeToken(input: TokenInput!): Boolean
+  userRegister(input: UserInput!): AuthReturn!
+  userLogin(input: LoginInput!): AuthReturn!
+  userRefreshToken(input: TokenInput!): AuthReturn!
+  userRevokeToken(input: TokenInput!): Boolean!
+
+  userUpdate(input: UserInput!): UserReturn!
+}
+
+"""
+
+"""
+input UserQueryInput {
+  id: ID
+  username: Username
+  fullname: String
+}
+
+type Query {
+  userQuery(input: UserQueryInput!, type: QueryType!): [UserReturn]!
 }

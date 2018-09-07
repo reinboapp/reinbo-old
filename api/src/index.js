@@ -2,6 +2,7 @@ require("now-env");
 require("pretty-error").start();
 import { GraphQLServer, PubSub } from "graphql-yoga";
 
+/** database */
 import mongoose from "mongoose";
 import redis from "redis";
 
@@ -10,6 +11,8 @@ import resolvers from "./resolvers";
 import models from "./models";
 import middlewares from "./middlewares";
 
+/** middlewares */
+import helmet from "helmet";
 import jwtMiddleware, {
   decode as decodeJwtAndGetUser
 } from "./middlewares/express/jwtMiddleware";
@@ -28,10 +31,10 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {});
 
-const options = {
-  port: process.env.PORT
-  // tracing: true
-};
+export const redisClient = redis.createClient({
+  url: process.env.REDIS_URI,
+  db: 6
+});
 
 const context = async req => {
   let authUser = {};
@@ -49,10 +52,7 @@ const context = async req => {
     authUser = await decodeJwtAndGetUser(token);
   }
   const pubsub = new PubSub();
-  const redisClient = redis.createClient({
-    url: process.env.REDIS_URI,
-    db: 6
-  });
+
   return {
     authUser,
     userAgent,
@@ -63,14 +63,25 @@ const context = async req => {
   };
 };
 
+/**create graphql server */
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
   context,
   middlewares
 });
+
+/**express middleware */
+server.express.use(helmet());
 server.express.use(jwtMiddleware);
 server.express.use(uaParser);
+
+/**start server */
+const options = {
+  port: process.env.PORT
+  // tracing: true
+};
+
 server.start(options, ({ port }) =>
   console.log(`Server is running on localhost:${port}`)
 );
