@@ -1,6 +1,10 @@
 scalar Upload
 scalar Date
 
+scalar MongoID
+scalar JWT
+scalar URL
+
 # user
 scalar Username
 scalar Password

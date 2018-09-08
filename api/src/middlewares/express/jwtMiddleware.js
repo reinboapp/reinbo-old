@@ -4,8 +4,8 @@ import User from "../../models/User";
 
 export const decode = async token => {
   const decodedJwt = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
-  if (decodedJwt._id) {
-    const userId = decodedJwt._id;
+  if (decodedJwt.id) {
+    const userId = decodedJwt.id;
     const foundUser = await User.findById(userId);
     return foundUser;
   }
@@ -24,7 +24,11 @@ export default async (req, res, next) => {
       req.headers.authorization.split(" ")[0] === "Bearer"
     ) {
       const token = req.headers.authorization.split(" ")[1];
-      req.user = await decode(token);
+      const decodedUser = await decode(token);
+      req.user = {
+        id: decodedUser._id,
+        ...decodedUser
+      };
     }
     next();
   } catch (e) {

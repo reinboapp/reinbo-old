@@ -4,7 +4,7 @@ import { GraphQLServer, PubSub } from "graphql-yoga";
 
 /** database */
 import mongoose from "mongoose";
-import redis from "redis";
+import Redis from "ioredis";
 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
@@ -26,15 +26,11 @@ mongoose.connect(
     useNewUrlParser: true
   }
 );
-
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {});
 
-export const redisClient = redis.createClient({
-  url: process.env.REDIS_URI,
-  db: 6
-});
+export const redisClient = new Redis(process.env.REDIS_URI);
 
 const context = async req => {
   let authUser = {};
@@ -52,8 +48,9 @@ const context = async req => {
     authUser = await decodeJwtAndGetUser(token);
   }
   const pubsub = new PubSub();
-
+  const { request } = req;
   return {
+    request,
     authUser,
     userAgent,
     models,

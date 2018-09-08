@@ -2,21 +2,12 @@
 
 """
 type UserReturn {
-  id: ID
+  id: MongoID
   username: Username
   fullname: String
   bio: String
   createdAt: Date
   updatedAt: Date
-}
-type AuthReturn {
-  id: ID
-  username: Username
-  fullname: String
-  email: Email
-  success: Boolean
-  accessToken: String
-  refreshToken: String
 }
 
 input UserInput {
@@ -34,16 +25,30 @@ input LoginInput {
   username: Username
   password: Password!
 }
+
+type AuthReturn {
+  id: MongoID
+  username: Username
+  fullname: String
+  email: Email
+  success: Boolean
+  createdAt: Date
+  updatedAt: Date
+  accessToken: JWT
+  refreshToken: JWT
+}
+
 """
 for refresh token
 """
 input TokenInput {
-  refreshToken: String
+  refreshToken: JWT!
 }
 
 type Mutation {
   userRegister(input: UserInput!): AuthReturn!
   userLogin(input: LoginInput!): AuthReturn!
+
   userRefreshToken(input: TokenInput!): AuthReturn!
   userRevokeToken(input: TokenInput!): Boolean!
 
@@ -54,11 +59,15 @@ type Mutation {
 
 """
 input UserQueryInput {
-  id: ID
+  id: MongoID
   username: Username
   fullname: String
 }
 
+input UserId {
+  id: MongoID!
+}
 type Query {
   userQuery(input: UserQueryInput!, type: QueryType!): [UserReturn]!
+  userGetToken(input: UserId!): [JWT]!
 }

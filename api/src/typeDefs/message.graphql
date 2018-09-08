@@ -11,16 +11,13 @@ enum MessageQueryType {
 }
 
 type MessageReturn {
-  id: ID
-  from: ID!
-  conversationId: ID!
+  id: MongoID
+  from: MongoID!
+  conversationId: MongoID!
   content: String
-  embed: String
-  image: String
-  audio: String
-  video: String
   type: MessageType
   mediaType: MediaType
+  media: String
   edited: Boolean
   editedContent: String
 }
@@ -32,7 +29,7 @@ input MessageMutationInput {
 }
 
 input MessageQueryInput {
-  conversationId: ID!
+  conversationId: MongoID!
   search: String
 }
 

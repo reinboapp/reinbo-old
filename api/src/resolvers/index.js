@@ -9,6 +9,7 @@ import passwordScalar from "./customScalars/password.scalar";
 import emailScalar from "./customScalars/email.scalar";
 import fullnameScalar from "./customScalars/fullname.scalar";
 import dateScalar from "./customScalars/date.scalar";
+import jwtScalar from "./customScalars/jwt.scalar";
 
 const resolversArray = [
   // scalar
@@ -17,6 +18,7 @@ const resolversArray = [
   passwordScalar,
   emailScalar,
   dateScalar,
+  jwtScalar,
   // resolvers
   conversationResolvers,
   messageResolvers,

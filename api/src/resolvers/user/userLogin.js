@@ -27,14 +27,13 @@ export default async (_, { input }, { models, userAgent }) => {
       id: foundUser._id,
       ua: userAgent
     });
+
     return {
       id: foundUser._id,
       success: true,
-      username: foundUser.username,
-      fullname: foundUser.fullname,
-      email: foundUser.email,
       accessToken,
-      refreshToken
+      refreshToken,
+      ...foundUser.toJSON()
     };
   } catch (e) {
     // database error

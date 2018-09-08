@@ -25,5 +25,7 @@ export const PUBLIC = "PUBLIC";
 export const PRIVATE = "PRIVATE";
 export const SECRET = "SECRET";
 
-/** jwt key redis */
+/**jwt key redis
+ * for storing refreshToken
+ */
 export const REDIS_PREFIX_REFRESH_TOKEN = "rT";

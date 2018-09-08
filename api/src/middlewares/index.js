@@ -1,3 +1,4 @@
-import authorzation from "./authorization";
+import authorization from "./authorization";
+import rateLimiter from "./rateLimiter";
 
-export default [authorzation];
+export default [authorization, rateLimiter];

@@ -46,13 +46,12 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 /** JWT: generate accessToken from user */
 userSchema.methods.generateAccessToken = async function() {
   const user = this;
-  const { _id } = user;
   // one hour expired time
   const jwtOptions = {
     expiresIn: "1h"
   };
   const accessToken = await jwt.sign(
-    { _id },
+    { id: user._id },
     process.env.JWT_ACCESS_TOKEN_SECRET,
     jwtOptions
   );
