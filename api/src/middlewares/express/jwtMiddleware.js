@@ -7,7 +7,9 @@ export const decode = async token => {
   if (decodedJwt.id) {
     const userId = decodedJwt.id;
     const foundUser = await User.findById(userId);
-    return foundUser;
+    return {
+      id: foundUser._id
+    };
   }
   return {};
 };
@@ -25,10 +27,7 @@ export default async (req, res, next) => {
     ) {
       const token = req.headers.authorization.split(" ")[1];
       const decodedUser = await decode(token);
-      req.user = {
-        id: decodedUser._id,
-        ...decodedUser
-      };
+      req.user = decodedUser;
     }
     next();
   } catch (e) {

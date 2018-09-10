@@ -41,8 +41,8 @@ const createLimiter = ({ name, max, duration }) => {
 
 const AUTH_RATE = {
   name: "AR",
-  max: 2,
-  duration: "1m"
+  max: 7,
+  duration: "1h"
 };
 const TOKEN_RATE = {
   name: "TR",

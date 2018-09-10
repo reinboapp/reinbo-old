@@ -1,14 +1,11 @@
 type ConversationReturn {
   id: MongoID
-  channels: [Channel]
+  topics: [Topic]
   conversationName: Username! # public id, like username
   name: Fullname
-  publicKey: String!
+  sizeType: SizeType
 }
 
-"""
-
-"""
 enum ConversationActivityType {
   JOIN
   LEAVE
@@ -19,10 +16,9 @@ input ConversationActivityInput {
 }
 
 input ConversationMutationInput {
-  conversationId: Username!
+  conversationName: Username!
   name: Fullname
   description: Fullname
-  # channels: [Channel]
 }
 
 type Mutation {

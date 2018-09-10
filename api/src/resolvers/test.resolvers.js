@@ -3,8 +3,8 @@ export default {
     publicPing: () => {
       return "public pong";
     },
-    secretPing: () => {
-      return "secret pong";
+    secretPing: (_, args, { authUser }) => {
+      return `secret pong, user:${authUser.id}`;
     }
   }
 };

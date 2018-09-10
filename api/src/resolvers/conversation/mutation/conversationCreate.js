@@ -5,14 +5,15 @@ import { PUBLIC, GROUP } from "../../constants";
  * PRIVATE conversation handled in createMessage, when first message sent
  * SECRET conversation handled in createUser
  */
+
 const conversationCreate = async (
   _,
   {
     input: {
       name,
       conversationName,
+      topics,
       description = "",
-      channels = [],
       privacyType = PUBLIC,
       sizeType = GROUP
     }
@@ -30,7 +31,6 @@ const conversationCreate = async (
     privacyType,
     sizeType
   });
-  channels.forEach(item => newConversation.push(item));
   // console.log(newConversation);
 
   return newConversation;
