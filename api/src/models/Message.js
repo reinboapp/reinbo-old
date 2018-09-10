@@ -7,18 +7,21 @@ const {
     Types: { ObjectId }
   }
 } = mongoose;
+
 const messageSchema = new mongoose.Schema(
   {
     from: { type: ObjectId, required: true },
-    conversationId: { type: ObjectId, required: true, index: true },
-    timeSent: { type: Date, required: true },
+    channelId: { type: ObjectId, required: true, index: true },
+
     content: String,
-    embed: String,
-    image: String,
-    video: String,
-    audio: String,
+    contentEncrypted: String,
+
+    media: String,
+    mediaType: String,
+
     edited: Boolean,
-    editedContent: String
+    editedContent: String,
+    editedContentEncrypted: String
   },
   {
     timestamps: true

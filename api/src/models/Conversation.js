@@ -1,30 +1,25 @@
 import mongoose from "mongoose";
 import constants from "./constants";
 
-const { PUBLIC, PRIVATE, GROUP, SECRET } = constants;
+const { PUBLIC, PRIVATE, SECRET, GROUP, TWO, ONE } = constants;
 
 const {
   Schema: {
     Types: { ObjectId }
   }
 } = mongoose;
+
 const conversationSchema = new mongoose.Schema(
   {
     name: { type: String },
-    channels: [{ type: String, required: true }],
-    conversationId: { type: String, required: true },
-    members: [{ type: ObjectId, required: true }],
-    owner: { type: ObjectId, required: true },
-    publicKey: { type: String, required: true },
-    privacyType: {
-      type: String,
-      required: true,
-      enum: [PUBLIC, PRIVATE, SECRET]
-    },
+    conversationName: { type: String, required: true, index: true }, // behavior is like username
+    owner: { type: ObjectId },
+    moderators: [{ type: ObjectId }], // or admin
+
     sizeType: {
       type: String,
       required: true,
-      enum: [GROUP, PRIVATE, SECRET]
+      enum: [GROUP, TWO, ONE]
     }
   },
   {

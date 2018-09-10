@@ -1,5 +1,5 @@
 import { REDIS_PREFIX_REFRESH_TOKEN } from "../constants";
-
+import ms from "ms";
 export default async (
   _,
   { input: { username, password, email, fullname } },
@@ -13,7 +13,8 @@ export default async (
   if (!email) return new Error("email not valid");
 
   /** save to database */
-  const newUser = new User({ username, fullname, password, email });
+  const newUser = new User({ username, fullname, password, email, bio });
+
   let newUserData = newUser;
   try {
     newUserData = await newUser.save();
@@ -21,31 +22,18 @@ export default async (
     return new Error(e);
   }
 
+  const { id } = newUserData;
+  const ua = userAgent;
+
   /**generate accessToken and refreshToken */
   const accessToken = await newUser.generateAccessToken();
-  const refreshToken = await newUser.generateRefreshToken({
-    id: newUserData._id,
-    ua: userAgent
-  });
-
-  /**save refreshToken to redis
-   * with expired 7d = 86400 * 7
-   */
-  redisClient.set(
-    `${REDIS_PREFIX_REFRESH_TOKEN}:${newUserData._id}:${refreshToken}`,
-    1,
-    "EX",
-    604800
-  );
+  const refreshToken = await newUser.generateRefreshToken({ id, ua });
 
   /** return */
   return {
-    id: newUserData._id,
-    username: newUserData.username,
-    fullname: newUserData.fullname,
-    bio: newUserData.bio,
-    success: true,
+    id,
     accessToken,
-    refreshToken
+    refreshToken,
+    ...newUserData.toJSON()
   };
 };

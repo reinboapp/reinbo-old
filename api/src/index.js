@@ -30,6 +30,7 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {});
 
+/**Redis Instance */
 export const redisClient = new Redis(process.env.REDIS_URI);
 
 const context = async req => {
@@ -48,9 +49,10 @@ const context = async req => {
     authUser = await decodeJwtAndGetUser(token);
   }
   const pubsub = new PubSub();
-  const { request } = req;
+  const { request, connection } = req;
   return {
     request,
+    connection,
     authUser,
     userAgent,
     models,

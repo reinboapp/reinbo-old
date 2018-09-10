@@ -1,7 +1,9 @@
-export default async (_, { input }, { models, userAgent }) => {
-  const { User } = models;
+export default async (
+  _,
+  { input: { username, password, email } },
+  { models: { User }, userAgent }
+) => {
   // validate
-  const { username, password, email } = input;
   if (!username && !email)
     return new Error("please provide valid email or username");
   if (!password) return new Error("password not valid");
@@ -22,21 +24,19 @@ export default async (_, { input }, { models, userAgent }) => {
     const passwordMatch = await foundUser.comparePassword(password);
     if (!passwordMatch) return new Error("password wrong");
 
+    const { id } = foundUser;
+    const ua = userAgent;
+
     const accessToken = await foundUser.generateAccessToken();
-    const refreshToken = await foundUser.generateRefreshToken({
-      id: foundUser._id,
-      ua: userAgent
-    });
+    const refreshToken = await foundUser.generateRefreshToken({ id, ua });
 
     return {
-      id: foundUser._id,
-      success: true,
+      id,
       accessToken,
       refreshToken,
       ...foundUser.toJSON()
     };
   } catch (e) {
-    // database error
     return new Error("Database error: " + e.message);
   }
 };

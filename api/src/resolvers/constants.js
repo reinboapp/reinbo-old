@@ -15,12 +15,18 @@ export const DELETE_CONVERSATION = "DELETE_CONVERSATION";
 
 /**
  * 3 different type of size of conversation:
- * GROUP (more than 2), PRIVATE (1 on 1), SECRET (just 1 people)
- * GROUP can have PUBLIC or PRIVATE privacy
- * PRIVATE only have PRIVATE privacy
- * SECRET only have SECRET privacy (for sending secret message)
+ * GROUP: can have more than 2
+ * TWO: 1 on 1
+ * ONE: just 1 people
  */
 export const GROUP = "GROUP";
+export const TWO = "TWO";
+export const ONE = "ONE";
+/**
+ * PUBLIC: open to public, story showed in stream
+ * PRIVATE: not open to public, not showed in stream
+ * SECRET: not save in database
+ */
 export const PUBLIC = "PUBLIC";
 export const PRIVATE = "PRIVATE";
 export const SECRET = "SECRET";
@@ -28,4 +34,4 @@ export const SECRET = "SECRET";
 /**jwt key redis
  * for storing refreshToken
  */
-export const REDIS_PREFIX_REFRESH_TOKEN = "rT";
+export const REDIS_PREFIX_REFRESH_TOKEN = "refresh";

@@ -1,9 +1,12 @@
 require("now-env");
 import mongoose from "mongoose";
 
-// import isEmail from "validator/lib/isEmail";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import ms from "ms";
+
+import { redisClient } from "../index";
+import { REDIS_PREFIX_REFRESH_TOKEN } from "../resolvers/constants";
 
 const userSchema = new mongoose.Schema(
   {
@@ -46,12 +49,10 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
 /** JWT: generate accessToken from user */
 userSchema.methods.generateAccessToken = async function() {
   const user = this;
-  // one hour expired time
-  const jwtOptions = {
-    expiresIn: "1h"
-  };
+  const ONE_HOUR = "1h";
+  const jwtOptions = { expiresIn: ONE_HOUR };
   const accessToken = await jwt.sign(
-    { id: user._id },
+    { id: user.id },
     process.env.JWT_ACCESS_TOKEN_SECRET,
     jwtOptions
   );
@@ -61,21 +62,33 @@ userSchema.methods.generateAccessToken = async function() {
 /**JWT: generate refreshToken from user
  * refreshToken is used for generating new token
  * contains device information (user-agent)
- * and save to database
- * @param data contain UA string
+ * and save to redis in 7d
+ * @param data contains userId and UA string
  */
-userSchema.methods.generateRefreshToken = async function(data) {
-  // const user = this;
-  // one week expired time
-  const jwtOptions = {
-    expiresIn: "7d"
-  };
+userSchema.methods.generateRefreshToken = async function({ id, ua }) {
+  const ONE_WEEK = "7d";
+  const jwtOptions = { expiresIn: ONE_WEEK };
   const refreshToken = await jwt.sign(
-    { data },
+    { id, ua },
     process.env.JWT_REFRESH_TOKEN_SECRET,
     jwtOptions
   );
+
+  /**save refreshToken to redis*/
+  redisClient.set(
+    `${REDIS_PREFIX_REFRESH_TOKEN}:${refreshToken}`,
+    id,
+    "EX",
+    ms(ONE_WEEK)
+  );
+
   return refreshToken;
 };
+
+/**JWT: exchange refresh token with new accesstoken and refresh token
+ * 1. check refreshToken exist in redis, delete it
+ * 2. create new accessToken and refreshToken, save it
+ */
+userSchema.methods.exchangeRefreshToken = async function(refreshToken) {};
 
 export default mongoose.model("User", userSchema);

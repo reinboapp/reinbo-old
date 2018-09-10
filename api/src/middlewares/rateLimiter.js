@@ -1,30 +1,37 @@
 import RateLimiter from "async-ratelimiter";
 import ms from "ms";
 
+import { resolversKeys } from "../resolvers/";
+// console.log(resolversKeys);
+
 /**
- * graphql api rate limiter
+ * graphql api rate limiter,
+ * if not auth per user ip, else per userId
  * @param {int} max: maximum request
  * @param {int} duration: duration, in miliseconds
  */
-const GraphRateLimiter = ({ max, duration }) => {
+const createLimiter = ({ name, max, duration }) => {
   return async (resolve, _, args, { request, redisClient, authUser }, info) => {
-    console.log(info);
     let limitId = authUser.id;
     if (!limitId) {
       limitId = request.ip;
+      if (limitId === "::1") {
+        limitId = "localhost";
+      }
     }
-    const authRateLimiter = new RateLimiter({
-      id: limitId,
+    const rateLimiter = new RateLimiter({
+      id: `${limitId}`,
       db: redisClient,
       max,
-      duration
+      duration: ms(duration),
+      namespace: name
     });
     try {
-      const { remaining } = await authRateLimiter.get();
+      const { remaining } = await rateLimiter.get();
       if (remaining > 0) {
         return resolve();
       } else {
-        return new Error("Auth: Too many request");
+        return new Error(`Too many request ${max}/${duration}`);
       }
     } catch (e) {
       return new Error(e);
@@ -33,17 +40,42 @@ const GraphRateLimiter = ({ max, duration }) => {
 };
 
 const AUTH_RATE = {
+  name: "AR",
+  max: 2,
+  duration: "1m"
+};
+const TOKEN_RATE = {
+  name: "TR",
   max: 7,
+  duration: "5m"
+};
+const NORMAL_RATE = {
+  name: "NR",
+  max: 2000,
   duration: "1h"
 };
-const NORMAL_RATE = {};
+
+const withNormalRate = (key = "Mutation") => {
+  const rate = {};
+  resolversKeys[key].forEach(item => {
+    rate[item] = createLimiter(NORMAL_RATE);
+  });
+  return rate;
+};
 
 export default {
   Mutation: {
-    userLogin: GraphRateLimiter(AUTH_RATE),
-    userRegister: GraphRateLimiter(AUTH_RATE)
-    // messageMutation: rateLimiter
+    ...withNormalRate("Mutation"),
+
+    userLogin: createLimiter(AUTH_RATE),
+    userRegister: createLimiter(AUTH_RATE),
+
+    userRefreshToken: createLimiter(TOKEN_RATE)
   },
-  Query: {},
-  Subscription: {}
+  Query: {
+    ...withNormalRate("Query")
+  },
+  Subscription: {
+    ...withNormalRate("Subscription")
+  }
 };

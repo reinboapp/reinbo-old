@@ -1,0 +1,5 @@
+type Channel {
+  id: MongoID
+  name: String
+  members: [UserReturn]
+}

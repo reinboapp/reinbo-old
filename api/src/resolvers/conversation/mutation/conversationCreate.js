@@ -1,6 +1,7 @@
 import { PUBLIC, GROUP } from "../../constants";
 /**
  * create GROUP conversation by default
+ *
  * PRIVATE conversation handled in createMessage, when first message sent
  * SECRET conversation handled in createUser
  */
@@ -9,7 +10,7 @@ const conversationCreate = async (
   {
     input: {
       name,
-      conversationId,
+      conversationName,
       description = "",
       channels = [],
       privacyType = PUBLIC,
@@ -18,18 +19,18 @@ const conversationCreate = async (
   },
   { eventEmitter: { chatEmitter }, authUser, models: { Conversation } }
 ) => {
-  if (!conversationId || !name) {
+  if (!conversationName || !name) {
     return new Error("invalid data");
   }
   const newConversation = new Conversation({
-    channels: ["general", "secret", ...channels],
-    conversationId,
+    conversationName,
     description,
-    publicKey: "sdfds",
+    publicKey,
     name,
     privacyType,
     sizeType
   });
+  channels.forEach(item => newConversation.push(item));
   // console.log(newConversation);
 
   return newConversation;

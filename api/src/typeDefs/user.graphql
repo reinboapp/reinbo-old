@@ -31,7 +31,6 @@ type AuthReturn {
   username: Username
   fullname: String
   email: Email
-  success: Boolean
   createdAt: Date
   updatedAt: Date
   accessToken: JWT

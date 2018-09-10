@@ -1,18 +1,7 @@
-type Channel {
-  id: MongoID
-  name: String
-  members: [UserReturn]
-}
-type ConversationUserReturn {
-  id: MongoID
-  username: Username
-  fullname: String
-}
 type ConversationReturn {
   id: MongoID
   channels: [Channel]
-  conversationId: Username! # public id, like username
-  members: [ConversationUserReturn]
+  conversationName: Username! # public id, like username
   name: Fullname
   publicKey: String!
 }
@@ -41,8 +30,11 @@ type Mutation {
     input: ConversationActivityInput!
     type: ConversationActivityType!
   ): ConversationReturn!
+
   conversationMutation(
     input: ConversationMutationInput!
     type: MutationType!
   ): ConversationReturn!
+
+  # channelMutation(): ConversationReturn!
 }
