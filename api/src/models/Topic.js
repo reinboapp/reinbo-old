@@ -1,31 +1,25 @@
 import mongoose from "mongoose";
 
-const { PUBLIC, PRIVATE, SECRET } = constants;
-
 const {
   Schema: {
     Types: { ObjectId }
   }
 } = mongoose;
 
-const channelSchema = new mongoose.Schema(
+const topicSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     conversationId: { type: ObjectId, required: true, index: true },
     members: [{ type: ObjectId }],
 
     publicKey: { type: String, required: true },
-    privacyType: {
-      type: String,
-      enum: [PUBLIC, PRIVATE, SECRET],
-      required: true
-    }
+    isSecret: { type: Boolean, required: true, default: false }
   },
   {
     timestamps: true
   }
 );
 
-channelSchema.methods.generatePublicKey = async function() {};
+topicSchema.methods.generatePublicKey = async function() {};
 
-export default mongoose.model("Channel", channelSchema);
+export default mongoose.model("Topic", topicSchema);

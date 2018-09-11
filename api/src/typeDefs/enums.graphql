@@ -1,9 +1,3 @@
-enum SizeType {
-  GROUP
-  TWO
-  ONE
-}
-
 enum MediaType {
   IMAGE
   EMBED

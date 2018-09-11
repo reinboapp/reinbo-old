@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import constants from "./constants";
-
-const { PUBLIC, PRIVATE, SECRET, GROUP, TWO, ONE } = constants;
 
 const {
   Schema: {
@@ -12,15 +9,15 @@ const {
 const conversationSchema = new mongoose.Schema(
   {
     name: { type: String },
-    conversationName: { type: String, required: true, index: true }, // behavior is like username
-    owner: { type: ObjectId },
-    moderators: [{ type: ObjectId }], // or admin
+    conversationName: { type: String, required: true, unique: true }, // behavior is like username
+    description: String,
 
-    sizeType: {
-      type: String,
-      required: true,
-      enum: [GROUP, TWO, ONE]
-    }
+    owner: { type: ObjectId, ref: "User" },
+    moderators: [{ type: ObjectId, ref: "User" }], // or admin
+    members: [{ type: ObjectId, ref: "User" }],
+
+    isPublic: { type: Boolean, default: false, required: true },
+    isGroup: { type: Boolean, default: false, required: true }
   },
   {
     timestamps: true

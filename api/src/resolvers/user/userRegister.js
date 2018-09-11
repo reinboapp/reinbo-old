@@ -19,7 +19,7 @@ export default async (
   try {
     newUserData = await newUser.save();
   } catch (e) {
-    return new Error(e);
+    return new Error(e.message);
   }
 
   const { id } = newUserData;

@@ -2,4 +2,5 @@ type Topic {
   id: MongoID
   name: String
   members: [UserReturn]
+  isPublic: Boolean
 }

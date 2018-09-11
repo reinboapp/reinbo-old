@@ -1,9 +1,16 @@
 type ConversationReturn {
   id: MongoID
   topics: [Topic]
-  conversationName: Username! # public id, like username
+  conversationName: Username # public id, like username
   name: Fullname
-  sizeType: SizeType
+  description: Fullname
+  members: [UserReturn]
+
+  isPublic: Boolean
+  isGroup: Boolean
+
+  createdAt: Date
+  updatedAt: Date
 }
 
 enum ConversationActivityType {
@@ -12,13 +19,23 @@ enum ConversationActivityType {
 }
 
 input ConversationActivityInput {
-  conversationId: Username!
+  conversationName: Username!
 }
 
-input ConversationMutationInput {
-  conversationName: Username!
+input ConversationInput {
   name: Fullname
   description: Fullname
+
+  conversationName: Username
+  user2: MongoID
+
+  isPublic: Boolean
+  isGroup: Boolean
+}
+
+input ConversationQuery {
+  id: MongoID
+  conversationName: String
 }
 
 type Mutation {
@@ -28,9 +45,16 @@ type Mutation {
   ): ConversationReturn!
 
   conversationMutation(
-    input: ConversationMutationInput!
+    input: ConversationInput!
     type: MutationType!
   ): ConversationReturn!
 
   # channelMutation(): ConversationReturn!
+}
+
+type Query {
+  conversationQuery(
+    query: ConversationQuery!
+    type: QueryType!
+  ): ConversationReturn!
 }
